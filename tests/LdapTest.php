@@ -37,15 +37,12 @@ class LdapTest extends TestCase {
         $host          = 'ldap.forumsys.com';
         $port          = 389;
         $rdn           = 'cn=read-only-admin,dc=example,dc=com';
-        $userName      = 'uid=tesla';
         $password      = 'badPassword';
         $timeout       = 1.0;
         $ldapVersion   = 3;
         $ldap          = new Ldap( $host, $port, $timeout, $ldapVersion );
-        $authenticated = $ldap->authenticate( $rdn, $password );
+        $ldap->authenticate( $rdn, $password );
     }
-
-
 
 
 }

@@ -26,9 +26,9 @@ class Ldap {
      * @param int    $ldapVersion
      */
     public function __construct( string $ldapHost, int $ldapPort = 389, float $timeout = 1.0, int $ldapVersion = 3 ) {
-        $this->ldapHost = $ldapHost;
-        $this->ldapPort = $ldapPort;
-        $this->timeout  = $timeout;
+        $this->ldapHost    = $ldapHost;
+        $this->ldapPort    = $ldapPort;
+        $this->timeout     = $timeout;
         $this->ldapVersion = $ldapVersion;
         @fsockopen( $this->ldapHost, $this->ldapPort, $this->errno, $this->errstr, $this->timeout );
     }
@@ -50,19 +50,14 @@ class Ldap {
             throw new UnableToReachLdapServer( "Unable to reach the ldap server you tried at: " . $this->ldapHost . ':' . $this->ldapPort . " with a timeout of " . $this->timeout . " seconds." );
         endif;
 
-
-
-        // Connecting to LDAP
         $ldapLinkIdentifier = ldap_connect( $this->ldapHost, $this->ldapPort );
 
         if ( false === $ldapLinkIdentifier ):
             throw new UnableToConnectToLdapServer( "Unable to reach the ldap server you tried at: " . $this->ldapHost . ':' . $this->ldapPort );
         endif;
 
-        // Set version
-        ldap_set_option($ldapLinkIdentifier, LDAP_OPT_PROTOCOL_VERSION, $this->ldapVersion);
+        ldap_set_option( $ldapLinkIdentifier, LDAP_OPT_PROTOCOL_VERSION, $this->ldapVersion );
 
-        // binding to ldap server
         try {
             $ldapIsBound = ldap_bind( $ldapLinkIdentifier, $rdn, $password );
         } catch ( \Exception $exception ) {
@@ -70,7 +65,7 @@ class Ldap {
         }
 
         if ( false === $ldapIsBound ):
-            throw new LdapBindFailed("The ldap_bind() failed.");
+            throw new LdapBindFailed( "The ldap_bind() failed." );
         endif;
 
         return true;

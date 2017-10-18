@@ -17,6 +17,14 @@ class Ldap {
     protected $errno;
     protected $errstr;
 
+    /**
+     * Ldap constructor.
+     *
+     * @param string $ldapHost
+     * @param int    $ldapPort
+     * @param float  $timeout
+     * @param int    $ldapVersion
+     */
     public function __construct( string $ldapHost, int $ldapPort = 389, float $timeout = 1.0, int $ldapVersion = 3 ) {
         $this->ldapHost = $ldapHost;
         $this->ldapPort = $ldapPort;
@@ -25,7 +33,17 @@ class Ldap {
         @fsockopen( $this->ldapHost, $this->ldapPort, $this->errno, $this->errstr, $this->timeout );
     }
 
-    public function authenticate( string $rdn, string $userName, string $password ): bool {
+    /**
+     * @param string $rdn
+     * @param string $password
+     *
+     * @return bool
+     * @throws \DPRMC\Ldap\Exceptions\AuthenticationFailed
+     * @throws \DPRMC\Ldap\Exceptions\LdapBindFailed
+     * @throws \DPRMC\Ldap\Exceptions\UnableToConnectToLdapServer
+     * @throws \DPRMC\Ldap\Exceptions\UnableToReachLdapServer
+     */
+    public function authenticate( string $rdn, string $password ): bool {
         $filePointer = @fsockopen( $this->ldapHost, $this->ldapPort, $this->errno, $this->errstr, $this->timeout );
 
         if ( false === $filePointer ):
